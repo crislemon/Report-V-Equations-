@@ -1,0 +1,206 @@
+%++++++++++++++++++++++++++++++++++++++++
+% Don't modify this section unless you know what you're doing!
+\documentclass[letterpaper,12pt]{article}
+\usepackage{tabularx} % extra features for tabular environment
+\usepackage{amsmath}  % improve math presentation
+\usepackage{mathabx}
+\usepackage{braket}
+\usepackage{siunitx}
+\usepackage{graphicx} % takes care of graphic including machinery
+\usepackage[margin=1in,letterpaper]{geometry} % decreases margins
+\usepackage{cite} % takes care of citations
+\usepackage[final]{hyperref} % adds hyper links inside the generated pdf file
+\usepackage{blkarray}
+\usepackage{multirow}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\hypersetup{
+	colorlinks=true,       % false: boxed links; true: colored links
+	linkcolor=blue,        % color of internal links
+	citecolor=blue,        % color of links to bibliography
+	filecolor=magenta,     % color of file links
+	urlcolor=blue         
+}
+%++++++++++++++++++++++++++++++++++++++++
+
+
+\begin{document}
+
+\title{Report V}
+\author{Cristina Mier Gonz\'alez}
+\date{\today}
+\maketitle
+
+\begin{abstract}
+In this report .......
+
+\end{abstract}
+
+\section{Green's functions}
+
+The Nambu components of our problem are the following:
+
+\begin{equation*}
+\hat{\Psi}_{i}(\tau) = 
+    \begin{pmatrix}
+    \hat{c}_{i\uparrow}(\tau) \\
+    \hat{c}_{i\downarrow}(\tau) \\
+    \hat{c}_{i\uparrow}^\dagger(\tau) \\
+    \hat{c}_{i\downarrow}^\dagger(\tau) 
+    \end{pmatrix},
+\qquad
+\hat{\Psi}_{i}^\dagger(\tau) = 
+    \begin{pmatrix}
+    \hat{c}_{i\uparrow}^\dagger(\tau) & \hat{c}_{i\downarrow}^\dagger(\tau) & \hat{c}_{i\uparrow}(\tau) & \hat{c}_{i\downarrow}(\tau)
+    \end{pmatrix}
+\end{equation*}
+The Heisenberg operators are defined:
+\begin{equation}
+    \hat{c}_{i\sigma}^{(\dagger)}(\tau) = e^{\tau\mathcal{H}}\hat{c}_{i\sigma}^{(\dagger)}e^{-\tau\mathcal{H}}
+    \label{Heisenberg}
+\end{equation}
+Where $\tau$ is the imaginary time ($\tau = it$) and $\mathcal{H}$ is the Hamiltonian of our model. With this the Green's function is defined as
+\begin{equation}
+    \mathcal{G}(i, \tau; j, \tau') = - < T_\tau \hat{\Psi}_i(\tau) \otimes \hat{\Psi}_j(\tau')>
+\end{equation}
+Where $T_\tau$ is the time-ordening operator, more explicitly the previous equation becomes
+\begin{equation}
+    \mathcal{G}(i, \tau; j, \tau') = - \theta(\tau - \tau')<\hat{\Psi}_i(\tau) \otimes \hat{\Psi}_j(\tau')> + \theta(\tau' - \tau)<\hat{\Psi}_j(\tau') \otimes \hat{\Psi}_i(\tau)>
+\end{equation}
+Where $< ... > = \sum_n \frac{e^{-\beta E_n}}{Z} \bra{n} ... \ket{n}$ is the average over all states $\ket{n}$ and $Z$ is the canonical partition function. With this, we can explicitly calculate some of the components.
+\begin{equation}
+    \mathcal{G}_{11}(i, \tau; j, \tau') = - \theta(\tau - \tau')\underbrace{<\hat{c}_{i\uparrow}(\tau) \hat{c}_{j\uparrow}^\dagger(\tau')>}_{*} + \theta(\tau' - \tau) \underbrace{<\hat{c}_{j\uparrow}^\dagger(\tau') \hat{c}_{i\uparrow}(\tau)>}_{+}
+\end{equation}
+We explicitly calculate the term *, using Eq. \ref{Heisenberg}:
+\begin{equation*}
+    * = \sum_n  \frac{e^{-\beta E_n}}{Z}\bra{n} e^{\tau\mathcal{H}}\hat{c}_{i\uparrow}\underbrace{e^{-\tau\mathcal{H}} e^{\tau'\mathcal{H}}}_{= e^{-\mathcal{H}(\tau - \tau')}}\hat{c}_{i\uparrow}^{\dagger}e^{-\tau'\mathcal{H}} \ket{n}
+\end{equation*}
+And using the property that the trace of a matrix product is constant under cyclic permutations:
+\begin{equation*}
+    = \sum_n  \frac{e^{-\beta E_n}}{Z}\bra{n} e^{\mathcal{H}(\tau - \tau')}\hat{c}_{i\uparrow}e^{-\mathcal{H}(\tau - \tau')}\hat{c}_{i\uparrow}^{\dagger} \ket{n} = \sum_n  \frac{e^{-\beta E_n}}{Z}\bra{n} \hat{c}_{i\uparrow} (\tau - \tau')\hat{c}_{i\uparrow}^{\dagger} \ket{n}
+\end{equation*}
+We now write the creation and annihilation operators using the Bogoliubov canonical transformation:
+\begin{equation}
+    \hat{c}_{i\sigma} = \sum_n (u_{i\sigma}^n\hat{\gamma}_n - \sigma v_{i\sigma}^{n*}\hat{\gamma}_n^\dagger),
+    \qquad
+    \hat{c}_{i\sigma} = \sum_n (u_{i\sigma}^{n*}\hat{\gamma}_n^\dagger - \sigma v_{i\sigma}^{n}\hat{\gamma}_n)
+\end{equation}
+
+Where the $\hat{\gamma}^\dagger_n$ and $\hat{\gamma}_n$ operators created and annihilates, respectively, a Bogoluibov quasiparticle in the state $n$. 
+\begin{equation*}
+    * = \sum_n  \frac{e^{-\beta E_n}}{Z}\bra{n}\sum_s (u_{i\uparrow}^s\hat{\gamma}_s(\tau - \tau') - v_{i\uparrow}^{s*}\hat{\gamma}_s^\dagger(\tau - \tau')) \sum_{s'}(u_{j\uparrow}^{s'*}\hat{\gamma}_{s'}^\dagger - v_{j\uparrow}^{s'}\hat{\gamma}_{s'}) \ket{n}
+\end{equation*}
+We now perform the product of the two sums in $s$ and $s'$, since we are evaluating the trace $\bra{n} ... \ket{n}$, only the components with $\gamma\gamma^\dagger$ and $\gamma^\dagger\gamma$ will be non-zero, so only the cross-products survive:
+\begin{equation*}
+    * = \sum_n  \frac{e^{-\beta E_n}}{Z}\bra{n}
+    \sum_{s, s'} (u_{i\uparrow}^su_{j\uparrow}^{s'*}\hat{\gamma}_s(\tau - \tau')\hat{\gamma}_{s'}^\dagger + v_{i\uparrow}^{s*}v_{j\uparrow}^{s'}\hat{\gamma}_s^\dagger(\tau - \tau')\hat{\gamma}_{s'})\ket{n}
+\end{equation*}
+We now need to write the time dependency of the Bogoluibov quasiparticle operators, however, these operators diagonalize the Hamiltonian of our system, so that the following commutation relations are verified:
+\begin{equation}
+    [\gamma_n^\dagger, \mathcal{H}] = -E_n\gamma_n^\dagger, \qquad [\gamma_n, \mathcal{H}] = E_n\gamma_n
+\end{equation}
+From this it is easily shown that:
+\begin{equation}
+    \gamma_n^\dagger(\tau) = \gamma_n^\dagger e^{E_n\tau/\hbar}, \qquad \gamma_n(\tau) = \gamma_n e^{-E_n\tau/\hbar}
+\end{equation}
+So that the expression becomes:
+\begin{equation*}
+    * = \sum_n  \frac{e^{-\beta E_n}}{Z}\bra{n}
+    \sum_{s, s'} (e^{-E_s(\tau - \tau')/\hbar} u_{i\uparrow}^su_{j\uparrow}^{s'*}\hat{\gamma}_s\hat{\gamma}_{s'}^\dagger + e^{E_s(\tau - \tau')/\hbar}v_{i\uparrow}^{s*}v_{j\uparrow}^{s'}\hat{\gamma}_s^\dagger\hat{\gamma}_{s'})\ket{n}
+\end{equation*}
+We now use:
+\begin{equation}
+    \sum_n \frac{e^{-\beta E_n}}{Z} \bra{n} \gamma_s^\dagger \gamma_s \ket{n} = f(E_s), \qquad \sum_n \frac{e^{-\beta E_n}}{Z} \bra{n} \gamma_s\gamma_s\dagger \ket{n} = f(-E_s)
+\end{equation}
+Where $f(E)$ is the Fermi distribution. From the previous expression, we see that this results in a $\delta_{ss'}$, so the sum in $s'$ disspears and we end up with:
+\begin{equation*}
+    * = \sum_{s} (e^{-E_s(\tau - \tau')/\hbar} u_{i\uparrow}^su_{j\uparrow}^{s*}f(-E_s) + e^{E_s(\tau - \tau')/\hbar}v_{i\uparrow}^{s*}v_{j\uparrow}^{s}f(E_s))
+\end{equation*}
+Doing an analogous development, we find the second term to be:
+\begin{equation*}
+    + = \sum_{s} (e^{E_s(\tau' - \tau)/\hbar} u_{j\uparrow}^{s*}u_{i\uparrow}^{s}f(E_s) + e^{-E_s(\tau' - \tau)/\hbar}v_{j\uparrow}^{s}v_{i\uparrow}^{s*}f(-E_s))
+\end{equation*}
+Finally,
+\begin{equation}
+\begin{split}
+    \mathcal{G}_{11}(i, \tau; j, \tau') = - \theta(\tau - \tau')\sum_{s} (e^{-E_s(\tau - \tau')/\hbar} u_{i\uparrow}^s u_{j\uparrow}^{s*}f(-E_s) + e^{E_s(\tau - \tau')/\hbar}v_{i\uparrow}^{s*}v_{j\uparrow}^{s}f(E_s))\\
+    + \theta(\tau' - \tau)\sum_{s} (e^{E_s(\tau' - \tau)/\hbar} u_{j\uparrow}^{s*}u_{i\uparrow}^{s}f(E_s) + e^{-E_s(\tau' - \tau)/\hbar}v_{j\uparrow}^{s}v_{i\uparrow}^{s*}f(-E_s))
+\end{split}
+\end{equation}
+Following the same method, we can calculate any component of the $\mathcal{G}_{ij}(\tau, \tau')$ matrix. In particular, we can obtain the superconducting order parameter \cite{book}:
+\begin{equation}
+    \Delta_{ij} = - \frac{V}{2} \big[\mathcal{G}_{14}(i, \tau \rightarrow \tau'+0^+; j, \tau') - \mathcal{G}_{23}(i, \tau \rightarrow \tau'+0^+; j, \tau')\big]
+    \label{gap}
+\end{equation}
+The $\mathcal{G}_{14}$ and $\mathcal{G}_{23}$ components are calculated:
+\begin{equation}
+\begin{split}
+    \mathcal{G}_{14}(i, \tau; j, \tau') = - \theta(\tau - \tau')\sum_{s} (- e^{-E_s(\tau - \tau')/\hbar} u_{i\uparrow}^s v_{j\downarrow}^{s*}f(-E_s) + e^{E_s(\tau - \tau')/\hbar}v_{i\uparrow}^{s*}u_{j\downarrow}^{s}f(E_s))\\
+    + \theta(\tau' - \tau)\sum_{s} (-e^{E_s(\tau' - \tau)/\hbar} u_{j\uparrow}^{s}v_{i\downarrow}^{s*}f(-E_s) + e^{-E_s(\tau' - \tau)/\hbar}v_{j\uparrow}^{s*}u_{i\downarrow}^{s}f(E_s))
+\end{split}
+\end{equation}
+
+\begin{equation}
+\begin{split}
+    \mathcal{G}_{23}(i, \tau; j, \tau') = - \theta(\tau - \tau')\sum_{s} (e^{-E_s(\tau - \tau')/\hbar} u_{i\downarrow}^s v_{j\uparrow}^{s*}f(-E_s) - e^{E_s(\tau - \tau')/\hbar}v_{i\downarrow}^{s*}u_{j\uparrow}^{s}f(E_s))\\
+    + \theta(\tau' - \tau)\sum_{s} (e^{E_s(\tau' - \tau)/\hbar} u_{j\downarrow}^{s}v_{i\uparrow}^{s*}f(-E_s) - e^{-E_s(\tau' - \tau)/\hbar}v_{j\downarrow}^{s*}u_{i\uparrow}^{s}f(E_s))
+\end{split}
+\end{equation}
+From Eq. \ref{gap} we obtain:
+\begin{equation}
+    \Delta_{ij} = -\frac{V}{2}\big[\sum_s (-u_{i\uparrow}^s v_{j\downarrow}^{s*}f(-E_s)) + v_{i\uparrow}^{s*}u_{j\downarrow}^{s}f(E_s)) - u_{i\downarrow}^s v_{j\uparrow}^{s*}f(-E_s) + v_{j\downarrow}^{s*}u_{i\uparrow}^{s}f(E_s) \big]
+\end{equation}
+Now, we want to evaluate the local order parameter, this is, when $j = i$. And using that $f(-Es) = 1 - f(E_s)$: 
+\begin{equation*}
+    \Delta_{ii} = -\frac{V}{2}\sum_s (-u_{i\uparrow}^s v_{i\downarrow}^{s*}(1 - f(E_s)) + v_{i\uparrow}^{s*}u_{i\downarrow}^{s}f(E_s) - u_{i\downarrow}^s v_{i\uparrow}^{s*}(1 - f(E_s)) + v_{i\downarrow}^{s*}u_{i\uparrow}^{s}f(E_s)) 
+\end{equation*}
+Finally, we obtain:
+\begin{equation}
+    \Delta_{ii} = \frac{V}{2}\sum_s\Big[(u_{i\uparrow}^s v_{i\downarrow}^{s*} + u_{i\downarrow}^s v_{i\uparrow}^{s*})(1 - 2f(E_s))\Big]
+\end{equation}
+
+\clearpage
+
+\section{Symmetries in the BCS Hamiltonian}
+
+Given our spinor basis:
+\begin{equation}
+\hat{\Psi}_{i} = 
+    \begin{pmatrix}
+    \hat{c}_{i\uparrow} \\
+    \hat{c}_{i\downarrow} \\
+    \hat{c}_{i\uparrow}^\dagger\\
+    \hat{c}_{i\downarrow}^\dagger 
+    \end{pmatrix}
+    \label{Nambu}
+\end{equation}
+The Bogoluibov-de Gennes Hamiltonian has the form:
+\begin{equation}
+    \hat{H}_{BdG} =
+        \begin{pmatrix}
+        H_0 & \Delta \\
+        -\Delta^* & -H_0^*
+        \end{pmatrix}
+\end{equation}
+Where each element is a $2\times2$ matrix and $-H_0^*$ is the time-reversal of $H_0$. As we can see from Eq. \ref{Nambu}, we have both electron and hole components in our basis, and when solving the BdG Hamiltonian we will find two redundant solutions, one for electrons and one for holes, this means that we must have some electron-hole symmetry in the BdG Hamiltonian. This symmetry is given by the operator:
+\begin{equation}
+    \mathcal{P} = \tau_x \otimes \mathbb{1}_\sigma \mathcal{K} = 
+    \begin{pmatrix}
+    0 & 0 & 1 & 0\\
+    0 & 0 & 0 & 1\\
+    1 & 0 & 0 & 0\\
+    0 & 1 & 0 & 0
+    \end{pmatrix}\mathcal{K}
+\end{equation}
+Where $\mathcal{K}$ is the operator for complex conjugation. In the case of the BdG Hamiltonian the following relation holds:
+\begin{equation}
+    \mathcal{P}\hat{H}_{BdG}\mathcal{P}^{-1} = - \hat{H}_{BdG}
+\end{equation}
+Which means that if we have a solution $\hat{\Psi}_{i}$ of energy $E_i$, this automatically means that there is another solution $\hat{\Psi}_{j}$ with energy $E_j = -E_i$ satisfying $\hat{\Psi}_{j} = \mathcal{P}\hat{\Psi}_{i}$.
+
+
+\bibliography{name.bib}{}
+\bibliographystyle{abbrv}
+
+
+\end{document}
